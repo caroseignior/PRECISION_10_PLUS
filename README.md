@@ -1,2 +1,489 @@
-# PRECISION_10_PLUS
-Module de compas inertiel marin ESP32 (NMEA2000)
+██████╗ ███████╗ ██████╗ ██████╗ ██╗███████╗██╗ ██████╗ ███╗   ██╗
+██╔══██╗██╔════╝██╔════╝██╔═══██╗██║██╔════╝██║██╔═══██╗████╗  ██║
+██████╔╝█████╗  ██║     ██║   ██║██║█████╗  ██║██║   ██║██╔██╗ ██║
+██╔══██╗██╔══╝  ██║     ██║   ██║██║██╔══╝  ██║██║   ██║██║╚██╗██║
+██║  ██║███████╗╚██████╗╚██████╔╝██║██║     ██║╚██████╔╝██║ ╚████║
+╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
+
+PRECISION_10_PLUS — Centrale inertielle marine ESP32 (NMEA2000)
+
+
+
+
+# PRECISION_10_PLUS — Centrale inertielle NMEA2000 open‑source
+
+## 🧭 Présentation
+PRECISION_10_PLUS est une **centrale inertielle marine** basée sur **ESP32**, conçue pour fournir un heading stable, un pitch/roll précis, un ROT propre et un GPS filtré comme les traceurs professionnels (Simrad / Lowrance / B&G).  
+Le projet est né de l’idée de cloner un Lowrance Point‑1, puis est devenu une solution complète, calibrable, filtrée et totalement open‑source.
+
+---
+
+## ⚙️ README Technique
+
+### Architecture
+- **Microcontrôleur** : ESP32 DevKitC  
+- **Bus** : NMEA2000 via transceiver CAN (MCP2562 ou TJA1051)  
+- **Capteurs** : LSM6DS3 (accéléro/gyro) + LIS3MDL (magnétomètre)  
+- **Framework** : PlatformIO / Arduino  
+- **Librairies** :
+  - NMEA2000_esp32  
+  - Adafruit BME280 Library  
+  - Adafruit Unified Sensor  
+  - DallasTemperature / OneWire  
+
+### PGN envoyés
+| PGN | Description |
+|------|-------------|
+| **127250** | Vessel Heading |
+| **127251** | Rate of Turn |
+| **127257** | Attitude |
+| **127258** | Magnetic Variation |
+| **129025** | Position |
+| **129026** | COG/SOG |
+| **130310** | Environmental Parameters |
+| **130311** | Environmental Parameters Extended |
+| **126992** | System Time |
+
+### Commandes Bluetooth
+- `HELP`, `VERSION`, `GETALL`, `CALHDG`, `CALPR`, `SETVARIATION`, `RESETPR`, `RESETALL`, `GPSPOS`, `MAGXYZ`  
+- Toutes les commandes sont documentées dans `docs/Bluetooth_commands.md`.
+
+### Calibration
+- Pitch/Roll : via rotation lente sur 360°  
+- Heading : alignement magnétique + offsets persistants  
+- Variation : PGN 127258 automatique ou manuel  
+- Offsets air/mer : EEPROM persistante
+
+# PRECISION_10_PLUS — Centrale inertielle NMEA2000 open‑source
+
+![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-blue.svg)
+
+## 🧭 Présentation
+PRECISION_10_PLUS est une centrale inertielle marine basée sur ESP32, conçue pour fournir un heading stable, un pitch/roll précis, un ROT propre et un GPS filtré comme les traceurs professionnels (Simrad / Lowrance / B&G).  
+Le projet est né de l’idée de cloner un Lowrance Point‑1, puis est devenu une solution complète, calibrable, filtrée et totalement open‑source.
+
+---
+
+# ⚙️ README Technique
+
+## Architecture
+- Microcontrôleur : ESP32 DevKitC  
+- Bus : NMEA2000 via transceiver CAN (MCP2562 ou TJA1051)  
+- Capteurs : LSM6DS3 (accéléro/gyro) + LIS3MDL (magnétomètre)  
+- Framework : PlatformIO / Arduino  
+- Librairies :
+  - NMEA2000_esp32  
+  - Adafruit BME280  
+  - Adafruit Unified Sensor  
+  - DallasTemperature / OneWire  
+
+## PGN envoyés
+| PGN | Description |
+|------|-------------|
+| 127250 | Vessel Heading |
+| 127251 | Rate of Turn |
+| 127257 | Attitude |
+| 127258 | Magnetic Variation |
+| 129025 | Position |
+| 129026 | COG/SOG |
+| 130310 | Environmental Parameters |
+| 130311 | Environmental Parameters Extended |
+| 126992 | System Time |
+
+## Commandes Bluetooth
+`HELP`, `VERSION`, `GETALL`, `CALHDG`, `CALPR`, `SETVARIATION`, `RESETPR`, `RESETALL`, `GPSPOS`, `MAGXYZ`
+
+## Calibration
+- Pitch/Roll : rotation lente sur 360°  
+- Heading : alignement magnétique + offsets persistants  
+- Variation : PGN 127258 automatique ou manuel  
+- Offsets air/mer : EEPROM persistante
+
+## Compilation
+1. Ouvrir le projet dans VS Code / PlatformIO  
+2. Sélectionner l’environnement `esp32dev`  
+3. Compiler et téléverser  
+4. Vérifier la trame PGN 130310 sur le bus NMEA2000
+
+---
+
+# 📘 README Présentation
+
+## Objectif
+Offrir une alternative open‑source aux modules de compas inertiels commerciaux, avec une précision et une stabilité comparables, tout en restant accessible aux makers et navigateurs.
+
+## Fonctionnalités principales
+- Heading filtré (fusion IMU)  
+- Pitch / Roll / Rate‑Of‑Turn  
+- GPS filtré (COG/SOG dynamique)  
+- Variation magnétique persistante  
+- Interface Bluetooth complète  
+- Offsets EEPROM  
+- Compatibilité Simrad / Lowrance / B&G / Garmin  
+
+## Licence
+Ce projet est sous licence **Creative Commons BY‑NC 4.0**  
+→ Attribution obligatoire  
+→ Usage commercial strictement interdit  
+→ Libre d’utiliser, modifier, partager
+
+---
+
+# ⚠️ Clause de non‑responsabilité
+Ce projet est fourni gratuitement et sans garantie.  
+Toute utilisation commerciale est strictement interdite.  
+L’auteur décline toute responsabilité en cas de dommage matériel, erreur de navigation, perte de données ou incident lié à l’utilisation du module.  
+L’utilisateur est seul responsable de la vérification, de la calibration et de la conformité de son installation avant toute utilisation en mer.
+
+---
+
+## 🧩 Auteur
+**denis / caroseignior**  
+Développement embarqué et électronique marine.  
+Dépôt GitHub : https://github.com/caroseignior/PRECISION_10_PLUS
+
+## 🧩 Auteur
+**denis / caroseignior**  
+Développement embarqué et électronique marine.  
+Projet open‑source hébergé sur GitHub : [PRECISION_10_PLUS](https://github.com/caroseignior/PRECISION_10_PLUS)
+
+## Schéma de principe
+Voici l’architecture générale du module PRECISION_10_PLUS :
+
+IMU (LSM6DS3 + LIS3MDL)
+          │ I2C
+          ▼
+       ESP32
+  (Fusion IMU, GPS filtré,
+   PGN NMEA2000, BT)
+          │ CAN
+          ▼
+  Transceiver CAN
+          │
+          ▼
+     NMEA2000 Bus
+     
+Schema de cablage 
+
+┌──────────────────────────────────────────────────────────────┐
+│                          ESP32 DevKitC                       │
+│                                                              │
+│ 3V3 ────────────────────────────────┐                        │
+│ GND ────────────────────────────────┼──────────────┐         │
+│ GPIO21 (SDA) ───────────────┐       │              │         │
+│ GPIO22 (SCL) ───────────────┼───────┘              │         │
+│ GPIO4  (CAN_TX) ─────────────┐                     │         │
+│ GPIO5  (CAN_RX) ─────────────┘                     │         │
+└────────────────────────────────────────────────────┼─────────┘
+                                                     │ I2C
+                                                     ▼
+                         ┌────────────────────────────────────┐
+                         │              IMU                    │
+                         │   LSM6DS3  (Gyro + Accel)           │
+                         │   LIS3MDL (Magnétomètre)            │
+                         │                                    │
+                         │  VCC  ─────────── 3V3               │
+                         │  GND  ─────────── GND               │
+                         │  SDA  ─────────── GPIO21            │
+                         │  SCL  ─────────── GPIO22            │
+                         └────────────────────────────────────┘
+
+                                                     │ CAN TX/RX
+                                                     ▼
+┌────────────────────────────────────────────────────────────────┐
+│                     Transceiver CAN (MCP2562 / TJA1051)        │
+│                                                                │
+│   VCC ─────────── 5V                                           │
+│   GND ─────────── GND                                          │
+│   TXD ─────────── GPIO4 (ESP32 CAN_TX)                         │
+│   RXD ─────────── GPIO5 (ESP32 CAN_RX)                         │
+│                                                                │
+│   CANH ────────────┐                                           │
+│                    │                                           │
+│   CANL ────────────┘                                           │
+└────────────────────────────────────────────────────────────────┘
+                    │
+                    │ CAN 2.0B
+                    ▼
+         ┌──────────────────────────────────────────┐
+         │              Bus NMEA2000                │
+         │   Connecteur M12 / câble backbone        │
+         │   +12V (via réseau N2K)                  │
+         │   GND                                    │
+         │   CANH                                   │
+         │   CANL                                   │
+         └──────────────────────────────────────────┘
+
+
+Detail de cablage
+
+                 +12 V NMEA2000 (backbone)
+                         │
+                         │  Fusible 1 A
+                         
+                         ▼
+                 ┌───────────────────────┐
+                 │   Alimentation carte  │
+                 │  (DC/DC 12 V → 5 V)   │
+                 └─────────┬─────────────┘
+                           │  +5 V
+                           ▼
+        ┌──────────────────────────────────────────────┐
+        │                 ESP32 DevKitC                │
+        │                                              │
+        │  5V  ──────────────── +5 V                   │
+        │  3V3 ──────────────── régulateur interne     │
+        │  GND ──────────────── masse commune          │
+        │                                              │
+        │  GPIO21 (SDA) ────────┐                      │
+        │  GPIO22 (SCL) ────────┼─────┐               │
+        │                       │     │               │
+        │  GPIO4  (CAN_TX) ─────┐     │               │
+        │  GPIO5  (CAN_RX) ─────┘     │               │
+        └──────────────────────────────┼──────────────┘
+                                       │ I2C
+                                       ▼
+        ┌──────────────────────────────────────────────┐
+        │                IMU LSM6DS3 + LIS3MDL         │
+        │                                              │
+        │  VCC ─────────────── 3V3                     │
+        │  GND ─────────────── GND                     │
+        │  SDA ─────────────── GPIO21                  │
+        │  SCL ─────────────── GPIO22                  │
+        │                                              │
+        │  (Optionnel : résistances de pull‑up I2C     │
+        │   4.7 kΩ sur SDA et SCL vers 3V3)            │
+        └──────────────────────────────────────────────┘
+
+                                       │ CAN TX/RX
+                                       ▼
+        ┌──────────────────────────────────────────────┐
+        │        Transceiver CAN (MCP2562 / TJA1051)   │
+        │                                              │
+        │  VCC ─────────────── +5 V                    │
+        │  GND ─────────────── GND                     │
+        │  TXD ─────────────── GPIO4 (ESP32 CAN_TX)    │
+        │  RXD ─────────────── GPIO5 (ESP32 CAN_RX)    │
+        │                                              │
+        │  CANH ────────┐                              │
+        │               │                              │
+        │  CANL ────────┘                              │
+        │                                              │
+        │  (Optionnel : résistance de terminaison      │
+        │   120 Ω entre CANH et CANL si extrémité bus) │
+        └──────────────────────────────────────────────┘
+                       │
+                       │ CAN 2.0B
+                       ▼
+        ┌──────────────────────────────────────────────┐
+        │              Bus NMEA2000                    │
+        │  +12 V (alimentation réseau)                 │
+        │  GND                                         │
+        │  CANH                                        │
+        │  CANL                                        │
+        └──────────────────────────────────────────────┘
+
+🧩 Résumé câblage 
+ESP32 → IMU (LSM6DS3 + LIS3MDL)
+
+SDA → GPIO21
+
+SCL → GPIO22
+
+VCC → 3V3
+
+GND → GND
+
+ESP32 → Transceiver CAN (MCP2562 / TJA1051)
+
+CAN_TX → GPIO4
+
+CAN_RX → GPIO5
+
+VCC → 5V
+
+GND → GND
+
+Transceiver CAN → Bus NMEA2000
+
+CANH → CANH
+
+CANL → CANL
+
+Alimentation NMEA2000 → +12V / GND via le backbone
+
+Points importants à noter 
+Alimentation
+
++12 V venant du backbone NMEA2000 → fusible → convertisseur DC/DC 12 V→5 V.
+
+ESP32 alimenté en 5 V sur la broche 5V, régulateur interne pour 3.3 V.
+
+Transceiver CAN alimenté en 5 V, masse commune avec ESP32.
+
+Bus CAN / NMEA2000
+
+CANH / CANL du transceiver reliés au backbone NMEA2000.
+
+Résistance de terminaison 120 Ω entre CANH et CANL si ta carte est en extrémité de bus.
+
+IMU I2C
+
+IMU alimentée en 3.3 V.
+
+Pull‑up I2C (4.7 kΩ typiques) sur SDA/SCL vers 3.3 V si non intégrés sur le module.
+
+                           ┌───────────────────────────────┐
+                           │   NMEA2000 Backbone (+12 V)    │
+                           │   +12 V  ───────────────┐      │
+                           │   GND    ───────────────┼──┐   │
+                           └──────────────────────────┘  │   │
+                                                         │   │
+                                      Fusible 1 A        │   │
+                                +12 V ──────[ FUSE ]─────┘   │
+                                                         │
+                                                         ▼
+                           ┌────────────────────────────────────┐
+                           │   Convertisseur DC/DC 12 V → 5 V   │
+                           │   +5 V OUT ───────────────┐        │
+                           │   GND OUT ────────────────┼──┐     │
+                           └────────────────────────────┘  │     │
+                                                           │     │
+                                                           ▼     ▼
+        ┌────────────────────────────────────────────────────────────────┐
+        │                           ESP32 DevKitC                        │
+        │                                                                │
+        │  5V  ─────────────────────────────── +5 V (DC/DC)              │
+        │  3V3 ──────────────── régulateur interne                       │
+        │  GND ─────────────────────────────── GND                       │
+        │                                                                │
+        │  GPIO21 (SDA) ───────────────┐                                 │
+        │  GPIO22 (SCL) ───────────────┼───────┐                         │
+        │                               │       │                        │
+        │  GPIO4  (CAN_TX) ─────────────┐       │                        │
+        │  GPIO5  (CAN_RX) ─────────────┘       │                        │
+        └────────────────────────────────────────┼────────────────────────┘
+                                                 │ I2C
+                                                 ▼
+        ┌────────────────────────────────────────────────────────────────┐
+        │                 IMU LSM6DS3 + LIS3MDL                          │
+        │                                                                │
+        │  VCC ─────────────────────────── 3V3                           │
+        │  GND ─────────────────────────── GND                           │
+        │  SDA ─────────────────────────── GPIO21                        │
+        │  SCL ─────────────────────────── GPIO22                        │
+        │                                                                │
+        │  Pull‑ups I2C :                                                │
+        │     SDA ──[4.7 kΩ]──┐                                          │
+        │     SCL ──[4.7 kΩ]──┼─── 3V3                                   │
+        │                     └──────────────────────────────────────────│
+        └────────────────────────────────────────────────────────────────┘
+
+                                                 │ CAN TX/RX
+                                                 ▼
+        ┌────────────────────────────────────────────────────────────────┐
+        │          Transceiver CAN (MCP2562 ou TJA1051)                  │
+        │                                                                │
+        │  VCC ─────────────────────────── 5V                            │
+        │  GND ─────────────────────────── GND                           │
+        │  TXD ─────────────────────────── GPIO4 (ESP32 CAN_TX)          │
+        │  RXD ─────────────────────────── GPIO5 (ESP32 CAN_RX)          │
+        │                                                                │
+        │  CANH ────────────────┐                                        │
+        │                       │                                        │
+        │  CANL ────────────────┘                                        │
+        │                                                                │
+        │  Résistance de terminaison (si extrémité
+         -----------------------------------------------------------------
+
+    Diagramme des PGN — PRECISION_10_PLUS
+Voici un diagramme de principe des PGN que le module publie sur le bus NMEA2000.
+
+Acknowledgments.
+
+## Remerciements
+
+Un remerciement chaleureux à **Timo Lappalainen** et **Andreas Koritnik**  
+pour leur travail remarquable autour des bibliothèques NMEA2000 et leur engagement  
+dans l’open‑source. Leur expertise, leur rigueur et leur générosité ont été  
+une véritable source d’inspiration pour le développement de PRECISION_10_PLUS.
+
+Sans leurs contributions, l’écosystème NMEA2000 open‑source ne serait pas ce qu’il est aujourd’hui.
+
+## Compagnon de route
+
+Un mot pour mon compagnon numérique, toujours présent dans les moments de doute,
+de câblage hasardeux, de calibrations récalcitrantes et de nuits trop courtes.
+
+Merci à **Copilot**, pour sa patience, ses explications, ses schémas improvisés,
+ses encouragements et sa capacité à rendre simple ce qui ne l’est jamais vraiment.
+
+Un partenaire invisible mais bien réel, qui m’a accompagné jusqu’au bout
+de cette aventure technique et humaine.
+
+
+## Crédits
+
+### Bibliothèques et contributions majeures
+
+- **[NMEA2000](ca://s?q=Parler_de_la_bibliotheque_NMEA2000)** — par *Timo Lappalainen*  
+  La référence absolue pour l’implémentation NMEA2000 sur microcontrôleurs.  
+  Solide, complète, stable, et maintenue depuis des années.  
+  Sans cette bibliothèque, l’écosystème NMEA2000 open‑source n’existerait tout simplement pas.
+
+- **[NMEA2000_esp32](ca://s?q=Parler_de_NMEA2000_esp32)** — par *Andreas Koritnik*  
+  Adaptation brillante pour l’ESP32, avec gestion CAN, timing, buffers et compatibilité marine.  
+  Une base technique exemplaire qui a permis à PRECISION_10_PLUS de devenir un module fiable.
+
+- **[Adafruit Unified Sensor](ca://s?q=Parler_de_Adafruit_Unified_Sensor)** — Adafruit  
+  Standardisation des capteurs, cohérence des mesures, simplicité d’intégration.
+
+- **[LSM6DS3](ca://s?q=Parler_du_capteur_LSM6DS3)** / **[LIS3MDL](ca://s?q=Parler_du_capteur_LIS3MDL)** — STMicroelectronics  
+  Capteurs IMU robustes, précis, parfaits pour une centrale inertielle marine.
+
+- **[DallasTemperature](ca://s?q=Parler_de_DallasTemperature)** / **OneWire** — Paul Stoffregen  
+  Gestion fiable des sondes 1‑Wire, utilisée pour les mesures air/mer.
+
+---
+
+### Communauté open‑source
+
+Un immense merci à la communauté **NMEA2000**, aux développeurs embarqués,  
+et à tous ceux qui partagent leurs travaux, leurs idées et leurs corrections.  
+PRECISION_10_PLUS est un projet qui n’existerait pas sans cet esprit de collaboration.
+
+---
+
+### Remerciements personnels
+
+Un remerciement chaleureux à **Timo Lappalainen** et **Andreas Koritnik**  
+pour leur travail remarquable, leur rigueur et leur générosité.  
+Ils ont été une véritable source d’inspiration pour ce projet.
+
+Sans leurs contributions, l’écosystème NMEA2000 open‑source ne serait pas ce qu’il est aujourd’hui.
+
+---
+
+### Licence
+
+Ce projet utilise la licence **Creative Commons BY‑NC 4.0**  
+→ Attribution obligatoire  
+→ Usage commercial strictement interdit  
+→ Libre d’utiliser, modifier, partager
+
+
+## Conclusion
+
+Pour moi, la boucle est bouclée.  
+PRECISION_10_PLUS est né d’une envie, d’un défi technique, puis d’une passion pour l’électronique marine.  
+Il est désormais complet, documenté, publié, et librement accessible sous licence CC BY‑NC 4.0.
+
+Charge à d’autres de le faire évoluer, de l’améliorer, de l’adapter à leurs besoins,  
+comme je l’ai fait en m’appuyant sur le travail de ceux qui m’ont inspiré.
+
+Merci à tous ceux qui continueront à faire vivre ce projet.
+
+
+
+
+        
